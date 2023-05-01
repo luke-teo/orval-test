@@ -3,8 +3,8 @@ module.exports = {
     input: "./openapi.yaml",
     output: {
       mode: "split",
-      target: "./src/api/",
-      schemas: "./src/model",
+      target: "./src/generated/api/",
+      schemas: "./src/generated/model",
       client: "swr",
     },
   },
