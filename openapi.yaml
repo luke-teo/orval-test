@@ -1,0 +1,1696 @@
+openapi: 3.0.3
+x-stoplight:
+  id: rnpfpzrvjvi6z
+info:
+  title: quiz-openapi
+  description: OpenAPI documentation of CKQuiz API endpoints.
+  version: 1.0.0
+  contact: {}
+servers:
+  - url: "http://local.colorkrew-quiz.com"
+paths:
+  /api/health/check:
+    get:
+      tags:
+        - api
+        - health
+        - check
+      summary: API Health Check
+      description: Health Check
+      operationId: healthCheck
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+                example: <string>
+              example:
+                - <string>
+                - <string>
+            example:
+              - <string>
+              - <string>
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              examples: {}
+              schema:
+                type: array
+                items:
+                  x-stoplight:
+                    id: lab6wgv4j28e3
+                  type: string
+  /api/v1/auth/logout:
+    get:
+      tags:
+        - api
+        - v1
+        - auth
+        - logout
+      summary: Auth - Logout
+      description: Authentication Logout
+      operationId: authLogout
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              examples:
+                OK:
+                  value: ""
+  /api/v1/auth/csrf-token:
+    get:
+      tags:
+        - api
+        - v1
+        - auth
+        - csrf-token
+      summary: Auth - CSRF Token
+      description: Authentication CSRF Token
+      operationId: authCSRFToken
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              examples:
+                OK:
+                  value: ""
+  /api/v1/answer/create:
+    post:
+      tags:
+        - api
+        - v1
+        - answer
+        - create1
+      summary: Answer - Create
+      description: Upon user answering a question
+      operationId: ApiV1AnswerCreate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                questionId:
+                  type: string
+                  example: <string>
+                questionOptionId:
+                  type: string
+                  example: <string>
+            examples: {}
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          answer:
+                            type: object
+                            properties:
+                              questionDescription:
+                                type: string
+                                example: <string>
+                              correctQuestionOptionId:
+                                type: string
+                                example: <string>
+                              selectedQuestionOptionId:
+                                type: string
+                                example: <string>
+                    required:
+                      - data
+                  - $ref: "#/components/schemas/ErrorResponseDto"
+              examples:
+                Success:
+                  value:
+                    data:
+                      answer:
+                        correctQuestionOptionId: 0da09032-9048-403d-9255-fe398b12ce2f
+                        questionDescription: "Pigeon, but in a voice she had peeped into the air. Even the Duchess to play croquet with the tea,' the March Hare."
+                        selectedQuestionOptionId: 0da09032-9048-403d-9255-fe398b12ce2f
+                Error - Question Option is null:
+                  value:
+                    error: EA4IVNCW2
+  /api/v1/answer/ratio:
+    post:
+      tags:
+        - api
+        - v1
+        - answer
+        - ratio
+      summary: Answer - Ratio
+      description: Retrieving ratio of answered and unanswered questions
+      operationId: ApiV1AnswerRatio
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      answeredCount:
+                        type: integer
+                        example: 0
+                      deliveredCount:
+                        type: integer
+                        example: 0
+                required:
+                  - data
+              examples:
+                OK:
+                  value:
+                    data:
+                      answeredCount: 3
+                      deliveredCount: 20
+  /api/v1/me/detail:
+    post:
+      tags:
+        - api
+        - v1
+        - me
+        - detail1
+      summary: Me - Detail
+      description: Me Detail
+      operationId: ApiV1MeDetail
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          avatarUrl:
+                            type: string
+                            example: "<string,null>"
+                            nullable: true
+                          email:
+                            type: string
+                            example: <string>
+                          organizationName:
+                            type: string
+                            example: <string>
+                          role:
+                            type: string
+                            example: UserRoleEnum
+                          tenantName:
+                            type: string
+                            example: <string>
+                          userId:
+                            type: string
+                            example: <string>
+                          username:
+                            type: string
+                            example: "<string,null>"
+                            nullable: true
+                    required:
+                      - data
+                  - $ref: "#/components/schemas/ErrorResponseDto"
+              examples:
+                Success:
+                  value:
+                    data:
+                      avatarUrl: null
+                      email: luke.teo@colorkrew.com
+                      organizationName: Default
+                      role: Admin
+                      tenantName: L Store
+                      userId: e445f81f-0126-447d-bae4-9f21201d0c43
+                      userName: null
+                Error - AuthNoUserSession:
+                  value:
+                    error: AuthNoUserSession
+                    data: []
+  /api/v1/question/answered-list:
+    post:
+      tags:
+        - api
+        - v1
+        - question
+        - answered-list
+      summary: Question - Answered List
+      description: Get answered question list
+      operationId: ApiV1QuestionAnsweredList
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      questions:
+                        type: array
+                        example:
+                          - deliveredAt: <string>
+                            id: <string>
+                            name: <string>
+                          - deliveredAt: <string>
+                            id: <string>
+                            name: <string>
+                        items:
+                          $ref: "#/components/schemas/QuestionOutlineResponseDto"
+                required:
+                  - data
+              examples:
+                Success:
+                  value:
+                    data:
+                      questions:
+                        - deliveredAt: "2023-04-22T20:11:14+00:00"
+                          id: f82b7dd1-9cd3-4e72-bbbf-8cc8d602069e
+                          name: Alice thought to herself 'It's the oldest rule in the air.
+                        - deliveredAt: "2023-04-24T07:18:12+00:00"
+                          id: 03155fe7-328b-46ee-831e-72ded386c7fe
+                          name: "Mouse was speaking, and this was his first remark, 'It was."
+                        - deliveredAt: "2023-04-25T12:25:14+00:00"
+                          id: 9c08c6b5-5a8e-4fb8-a8b0-2f84c558235a
+                          name: "First, however, she went on, 'if you don't know what to."
+  /api/v1/question/unanswered-list:
+    post:
+      tags:
+        - api
+        - v1
+        - question
+        - unanswered-list
+      summary: Question - Unanswered List
+      description: Get unanswered question list
+      operationId: ApiV1QuestionUnansweredList
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      questions:
+                        type: array
+                        example:
+                          - deliveredAt: <string>
+                            id: <string>
+                            name: <string>
+                          - deliveredAt: <string>
+                            id: <string>
+                            name: <string>
+                        items:
+                          $ref: "#/components/schemas/QuestionOutlineResponseDto"
+                required:
+                  - data
+              examples:
+                Success:
+                  value:
+                    data:
+                      questions:
+                        - deliveredAt: "2023-04-21T10:16:30+00:00"
+                          id: 1dcdb5ba-eefa-48ef-acaf-2810276733b6
+                          name: "A secret, kept from all the time she saw them, they were."
+                        - deliveredAt: "2023-04-19T18:14:01+00:00"
+                          id: cb9d61c5-1fc8-4499-848a-0230791cd1b3
+                          name: What made you so awfully clever?' 'I have answered three.
+                        - deliveredAt: "2023-04-19T13:31:52+00:00"
+                          id: 63985c27-810b-4961-994a-14759ef736f7
+                          name: "King hastily said, and went on eagerly. 'That's enough."
+                        - deliveredAt: "2023-04-19T01:56:59+00:00"
+                          id: 96b20354-9649-441f-83d8-2437ce699e2d
+                          name: "I know!' exclaimed Alice, who was peeping anxiously into."
+                        - deliveredAt: "2023-04-17T12:20:54+00:00"
+                          id: 672ad0b4-5932-4512-be9a-1beb369e2799
+                          name: "Soup, so rich and green, Waiting in a trembling voice to."
+                        - deliveredAt: "2023-04-13T00:41:50+00:00"
+                          id: 64d2c1a5-c5f8-4fc9-9473-568fdc016e1a
+                          name: "March Hare, who had been jumping about like mad things all."
+                        - deliveredAt: "2023-04-09T06:47:52+00:00"
+                          id: 2090f065-6365-43e4-a22d-b3e2f9da4443
+                          name: "Alice thought), and it put the hookah into its mouth."
+                        - deliveredAt: "2023-04-08T07:34:36+00:00"
+                          id: 509a203e-c354-43b9-993b-74b467a51fa6
+                          name: "White Rabbit, 'but it doesn't matter which way she put her."
+                        - deliveredAt: "2023-04-08T05:14:03+00:00"
+                          id: 789857fd-a6d5-47f7-8681-f041576bac5c
+                          name: "Dormouse; 'VERY ill.' Alice tried to open it; but, as the."
+                        - deliveredAt: "2023-04-06T09:02:18+00:00"
+                          id: 7da6b8ff-c156-4588-9b76-53ecbd4a964c
+                          name: Hatter. 'Does YOUR watch tell you what year it is?' 'Of.
+                        - deliveredAt: "2023-04-05T11:25:21+00:00"
+                          id: 792ffa51-6b36-4a2d-83e5-c560f04cabdf
+                          name: "Lory. Alice replied in a rather offended tone, 'Hm! No."
+                        - deliveredAt: "2023-04-02T08:12:19+00:00"
+                          id: 18e68225-03d4-4466-bbc0-c0b8675bbba6
+                          name: "I mentioned before, And have grown most uncommonly fat."
+  /api/v1/question/view-detail:
+    post:
+      tags:
+        - api
+        - v1
+        - question
+        - view-detail
+      summary: Question - View Detail
+      description: View selected question detail
+      operationId: ApiV1QuestionViewDetail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: <string>
+            examples:
+              Example 1:
+                value:
+                  id: f82b7dd1-9cd3-4e72-bbbf-8cc8d602069e
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      deliveredAt:
+                        type: string
+                        example: <string>
+                      id:
+                        type: string
+                        example: <string>
+                      name:
+                        type: string
+                        example: <string>
+                      questionOptions:
+                        type: array
+                        example:
+                          - id: <string>
+                            name: <string>
+                          - id: <string>
+                            name: <string>
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: <string>
+                            name:
+                              type: string
+                              example: <string>
+                      answer:
+                        example: null
+                        type: object
+                        nullable: true
+                        properties:
+                          correctQuestionOptionId:
+                            type: string
+                            x-stoplight:
+                              id: pejoo9ftzssa9
+                          questionDescription:
+                            type: string
+                            x-stoplight:
+                              id: bkcch9sa1b7dk
+                          selectedQuestionOptionId:
+                            type: string
+                            x-stoplight:
+                              id: cb8uecry9dq7w
+                required:
+                  - data
+              examples:
+                Success - w/o answer:
+                  value:
+                    data:
+                      deliveredAt: "2023-04-21 10:16:30"
+                      id: 1dcdb5ba-eefa-48ef-acaf-2810276733b6
+                      name: "A secret, kept from all the time she saw them, they were."
+                      questionOptions:
+                        - id: 468aa304-fee9-4443-b754-cfbed06c0e8e
+                          name: "Alice,) 'Well, I can't be civil, you'd better finish the."
+                        - id: c9aa1554-c137-4ef1-8a8f-b70104030b43
+                          name: I've been changed several times since then.' 'What do you.
+                        - id: 1869c247-c377-4d32-a04d-cb43101e5e04
+                          name: "Rabbit noticed Alice, as she tucked her arm affectionately."
+                        - id: 42baf24c-091b-4703-a346-64b5dbe41162
+                          name: "Mock Turtle, 'but if they do, why then they're a kind of."
+                      answer: null
+                Success - w/ answer:
+                  value:
+                    data:
+                      deliveredAt: "2023-04-22 20:11:14"
+                      id: f82b7dd1-9cd3-4e72-bbbf-8cc8d602069e
+                      name: Alice thought to herself 'It's the oldest rule in the air.
+                      questionOptions:
+                        - id: 860c648a-ee87-4cb1-bbeb-52e6ba306b9a
+                          name: "No, no! You're a serpent; and there's no room at all like."
+                        - id: c0692c65-9f06-4371-9709-e5c959b28f5a
+                          name: Bill! I wouldn't be so easily offended!' 'You'll get used.
+                        - id: 34c16215-54f0-4a16-8b3e-0fa957b75053
+                          name: "Mock Turtle. So she went to him,' said Alice loudly. 'The."
+                        - id: 62f45079-9cce-4b5d-aef6-f56170521bcb
+                          name: Longitude I've got to?' (Alice had no pictures or.
+                      answer:
+                        correctQuestionOptionId: 860c648a-ee87-4cb1-bbeb-52e6ba306b9a
+                        questionDescription: "D,' she added in an angry tone, 'Why, Mary Ann, and be turned out of the ground.' So she began thinking over all the."
+                        selectedQuestionOptionId: 62f45079-9cce-4b5d-aef6-f56170521bcb
+  /api/v1/delivery/list-dates:
+    post:
+      tags:
+        - api
+        - v1
+        - delivery
+        - list-dates
+      summary: Delivery - List Dates
+      description: Get delivery dates list
+      operationId: ApiV1DeliveryListDates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fromDate:
+                  type: string
+                  example: <string>
+                toDate:
+                  type: string
+                  example: <string>
+            examples:
+              Example 1:
+                value:
+                  fromDate: "2023-04-27"
+                  toDate: "2023-07-26"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          dates:
+                            $ref: "#/components/schemas/DeliveryDateResponseDto"
+                    required:
+                      - data
+                  - $ref: "#/components/schemas/EmptyResponseDto"
+              examples:
+                Success:
+                  value:
+                    data:
+                      dates:
+                        "2023-05-03":
+                          deliveryDate: "2023-05-03"
+                          deliveryDateId: null
+                          isDelivery: true
+                          questionId: null
+                        "2023-05-10":
+                          deliveryDate: "2023-05-10"
+                          deliveryDateId: null
+                          isDelivery: true
+                          questionId: null
+                        "2023-05-17":
+                          deliveryDate: "2023-05-17"
+                          deliveryDateId: null
+                          isDelivery: true
+                          questionId: null
+                        "2023-05-24":
+                          deliveryDate: "2023-05-24"
+                          deliveryDateId: null
+                          isDelivery: true
+                          questionId: null
+                        "2023-05-31":
+                          deliveryDate: "2023-05-31"
+                          deliveryDateId: null
+                          isDelivery: true
+                          questionId: null
+                        "2023-06-07":
+                          deliveryDate: "2023-06-07"
+                          deliveryDateId: null
+                          isDelivery: true
+                          questionId: null
+                        "2023-06-14":
+                          deliveryDate: "2023-06-14"
+                          deliveryDateId: null
+                          isDelivery: true
+                          questionId: null
+                        "2023-06-21":
+                          deliveryDate: "2023-06-21"
+                          deliveryDateId: null
+                          isDelivery: true
+                          questionId: null
+                        "2023-06-28":
+                          deliveryDate: "2023-06-28"
+                          deliveryDateId: null
+                          isDelivery: true
+                          questionId: null
+                        "2023-07-05":
+                          deliveryDate: "2023-07-05"
+                          deliveryDateId: null
+                          isDelivery: true
+                          questionId: null
+                        "2023-07-12":
+                          deliveryDate: "2023-07-12"
+                          deliveryDateId: null
+                          isDelivery: true
+                          questionId: null
+                        "2023-07-19":
+                          deliveryDate: "2023-07-19"
+                          deliveryDateId: null
+                          isDelivery: true
+                          questionId: null
+                        "2023-07-26":
+                          deliveryDate: "2023-07-26"
+                          deliveryDateId: null
+                          isDelivery: true
+                          questionId: null
+  /api/v1/delivery/list:
+    post:
+      tags:
+        - api
+        - v1
+        - delivery
+        - list
+      summary: Delivery - List
+      description: Get list of deliveries
+      operationId: ApiV1DeliveryList
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fromDate:
+                  type: string
+                  example: <string>
+                toDate:
+                  type: string
+                  example: <string>
+            examples:
+              Example 1:
+                value:
+                  fromDate: "2023-05-01"
+                  toDate: "2023-06-04"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      dates:
+                        example:
+                          - deliveryDate: <string>
+                            deliveryDateId: "<string,null>"
+                            isDelivery: true
+                            questionId: "<string,null>"
+                          - deliveryDate: <string>
+                            deliveryDateId: "<string,null>"
+                            isDelivery: true
+                            questionId: "<string,null>"
+                        oneOf:
+                          - $ref: "#/components/schemas/DeliveryDateResponseDto"
+                          - type: array
+                            x-stoplight:
+                              id: puncnrbq3v7jd
+                            items:
+                              x-stoplight:
+                                id: ufy9dp09ri4cn
+                              type: string
+                      deliveryWeekdays:
+                        type: array
+                        example:
+                          - WeekdayEnum
+                          - WeekdayEnum
+                        items:
+                          type: string
+                          example: WeekdayEnum
+                      isTodayPast:
+                        type: boolean
+                        example: true
+                      latestUpdate:
+                        type: integer
+                        example: 0
+                required:
+                  - data
+              examples:
+                Success - no schedule in current view:
+                  value:
+                    data:
+                      dates: []
+                      deliveryWeekdays:
+                        - Wed
+                      isTodayPast: false
+                      latestUpdate: 1682576499
+                Success - no schedule:
+                  value:
+                    data:
+                      dates: []
+                      deliveryWeekdays: []
+                      isTodayPast: false
+                      latestUpdate: 1682576564
+                Success - has schedule in current view:
+                  value:
+                    data:
+                      dates:
+                        "2023-05-03":
+                          deliveryDate: "2023-05-03"
+                          deliveryDateId: null
+                          isDelivery: true
+                          questionId: null
+                        "2023-05-10":
+                          deliveryDate: "2023-05-10"
+                          deliveryDateId: null
+                          isDelivery: true
+                          questionId: null
+                        "2023-05-17":
+                          deliveryDate: "2023-05-17"
+                          deliveryDateId: null
+                          isDelivery: true
+                          questionId: null
+                        "2023-05-24":
+                          deliveryDate: "2023-05-24"
+                          deliveryDateId: null
+                          isDelivery: true
+                          questionId: null
+                        "2023-05-31":
+                          deliveryDate: "2023-05-31"
+                          deliveryDateId: null
+                          isDelivery: true
+                          questionId: null
+                      deliveryWeekdays:
+                        - Wed
+                      isTodayPast: false
+                      latestUpdate: 1682576602
+  /api/v1/delivery-date/update:
+    post:
+      tags:
+        - api
+        - v1
+        - delivery-date
+        - update123
+      summary: DeliveryDate - Update
+      description: Update delivery dates
+      operationId: ApiV1DeliveryDateUpdate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deliveryDate:
+                  type: string
+                  example: <string>
+            examples:
+              Example 1:
+                value:
+                  deliveryDate: "2023-05-03"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/EmptyResponseDto"
+                  - $ref: "#/components/schemas/ErrorResponseDto"
+              examples: {}
+  /api/v1/delivery-weekday/list:
+    post:
+      tags:
+        - api
+        - v1
+        - delivery-weekday
+        - list1
+      summary: DeliveryWeekday - List
+      description: Get list of weekday deliveries
+      operationId: ApiV1DeliveryWeekdayList
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      deliveryWeekdays:
+                        type: object
+                        properties:
+                          deliveryWeekdays:
+                            type: array
+                            example:
+                              - <string>
+                              - <string>
+                            items:
+                              type: string
+                              example: <string>
+                required:
+                  - data
+              examples:
+                "Success - no weekdays set ":
+                  value:
+                    data:
+                      deliveryWeekdays:
+                        deliveryWeekdays: []
+                "Success - weekdays set ":
+                  value:
+                    data:
+                      deliveryWeekdays:
+                        deliveryWeekdays:
+                          - Tue
+  /api/v1/delivery-weekday/update:
+    post:
+      tags:
+        - api
+        - v1
+        - delivery-weekday
+        - update12
+      summary: DeliveryWeekday - Update
+      description: Update weekday deliveries
+      operationId: ApiV1DeliveryWeekdayUpdate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deliveryWeekday:
+                  type: string
+                  example: WeekdayEnum
+            examples:
+              Example 1:
+                value:
+                  deliveryWeekday: Wed
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/EmptyResponseDto"
+                  - $ref: "#/components/schemas/ErrorResponseDto"
+              examples: {}
+  /api/v1/organization-settings/detail:
+    post:
+      tags:
+        - api
+        - v1
+        - organization-settings
+        - detail
+      summary: OrganizationSettings - Detail
+      description: Get organization settings detail
+      operationId: ApiV1OrganizationSettingsDetail
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      deliveryTimer:
+                        type: string
+                        example: <string>
+                      timezone:
+                        type: string
+                        example: <string>
+                required:
+                  - data
+              examples:
+                Success:
+                  value:
+                    data:
+                      deliveryTimer: "18:00"
+                      timezone: Asia/Tokyo
+  /api/v1/organization-settings/update:
+    post:
+      tags:
+        - api
+        - v1
+        - organization-settings
+        - update1
+      summary: OrganizationSettings - Update
+      description: Update organization settings
+      operationId: ApiV1OrganizationSettingsUpdate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deliveryTimer:
+                  type: string
+                  example: <string>
+                timezone:
+                  type: string
+                  example: <string>
+            examples:
+              Example 1:
+                value:
+                  deliveryTimer: "18:02"
+                  timezone: Asia/Tokyo
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmptyResponseDto"
+              examples:
+                Success:
+                  value:
+                    data: []
+  /api/v1/question/create:
+    post:
+      tags:
+        - api
+        - v1
+        - question
+        - create
+      summary: Question - Create
+      description: Create questions
+      operationId: ApiV1QuestionCreate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                question:
+                  type: object
+                  properties:
+                    questionDescription:
+                      type: string
+                      example: <string>
+                    questionName:
+                      type: string
+                      example: <string>
+                    questionOptions:
+                      type: array
+                      example:
+                        - id: <string>
+                          isCorrect: true
+                          name: <string>
+                          position: 0
+                        - id: <string>
+                          isCorrect: true
+                          name: <string>
+                          position: 0
+                      items:
+                        $ref: "#/components/schemas/QuestionOptionSaveRequestDto"
+                questionPlacement:
+                  type: string
+                  example: QuestionPlacementEnum
+            examples:
+              Example 1:
+                value:
+                  question:
+                    questionDescription: test
+                    questionName: test
+                    questionOptions:
+                      - id: null
+                        isCorrect: true
+                        name: test
+                        position: 0
+                      - id: null
+                        isCorrect: false
+                        name: test
+                        position: 1
+                  questionPlacement: First
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          questionId:
+                            type: string
+                            example: <string>
+                    required:
+                      - data
+                  - $ref: "#/components/schemas/ErrorResponseDto"
+              examples:
+                Success:
+                  value:
+                    data:
+                      questionId: 51a86f1c-7157-4480-b157-22bf04d44e6f
+                Error - Invalid question option count:
+                  value:
+                    error: ENIWVHSJY
+                    data: []
+                Error - Error saving question and question options:
+                  value:
+                    error: ETOUMNJCH
+                    data: []
+  /api/v1/question/update:
+    post:
+      tags:
+        - api
+        - v1
+        - question
+        - update
+      summary: Question - Update
+      description: Update question
+      operationId: ApiV1QuestionUpdate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                questionDescription:
+                  type: string
+                  example: <string>
+                questionId:
+                  type: string
+                  example: <string>
+                questionName:
+                  type: string
+                  example: <string>
+                questionOptions:
+                  type: array
+                  example:
+                    - id: <string>
+                      isCorrect: true
+                      name: <string>
+                      position: 0
+                    - id: <string>
+                      isCorrect: true
+                      name: <string>
+                      position: 0
+                  items:
+                    $ref: "#/components/schemas/QuestionOptionSaveRequestDto"
+            examples:
+              Example 1:
+                value:
+                  questionDescription: test
+                  questionId: b8edd9e9-06cd-4d4d-82bd-cdc4e40ccb28
+                  questionName: test
+                  questionOptions:
+                    - id: 38d1466f-eb24-4edf-b88c-730539323425
+                      isCorrect: false
+                      name: test2
+                      position: 0
+                    - id: 5a91ba10-eef2-44e9-9cc6-f0aba2867102
+                      isCorrect: true
+                      name: test
+                      position: 1
+                    - id: null
+                      isCorrect: false
+                      name: asd
+                      position: 2
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/EmptyResponseDto"
+                  - $ref: "#/components/schemas/ErrorResponseDto"
+              examples: {}
+  /api/v1/question/delete:
+    post:
+      tags:
+        - api
+        - v1
+        - question
+        - delete
+      summary: Question - Delete
+      description: Delete question
+      operationId: ApiV1QuestionDelete
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                questionId:
+                  type: string
+                  example: <string>
+            examples:
+              Example 1:
+                value:
+                  questionId: 51a86f1c-7157-4480-b157-22bf04d44e6f
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/EmptyResponseDto"
+                  - $ref: "#/components/schemas/ErrorResponseDto"
+              examples: {}
+  /api/v1/question/delivered-detail:
+    post:
+      tags:
+        - api
+        - v1
+        - question
+        - delivered-detail
+      summary: Question - Delivered Detail
+      description: Get delivered question detail
+      operationId: ApiV1QuestionDeliveredDetail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                questionId:
+                  type: string
+                  example: <string>
+            example:
+              questionId: <string>
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          description:
+                            type: string
+                            example: <string>
+                          id:
+                            type: string
+                            example: <string>
+                          name:
+                            type: string
+                            example: <string>
+                          questionOptions:
+                            type: array
+                            example:
+                              - id: <string>
+                                isCorrect: true
+                                name: <string>
+                                position: 0
+                              - id: <string>
+                                isCorrect: true
+                                name: <string>
+                                position: 0
+                            items:
+                              $ref: "#/components/schemas/QuestionOptionResponseDto"
+                    required:
+                      - data
+                  - $ref: "#/components/schemas/ErrorResponseDto"
+              examples:
+                Error - Mismatched organization id:
+                  value:
+                    error: E7D6SG8SX
+                    data: []
+  /api/v1/question/delivered-list:
+    post:
+      tags:
+        - api
+        - v1
+        - question
+        - delivered-list
+      summary: Question - Delivered List
+      description: Get list of delivered question
+      operationId: ApiV1QuestionDeliveredList
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      questions:
+                        type: array
+                        example:
+                          - deliveredAt: <string>
+                            id: <string>
+                            name: <string>
+                          - deliveredAt: <string>
+                            id: <string>
+                            name: <string>
+                        items:
+                          $ref: "#/components/schemas/QuestionOutlineResponseDto"
+                required:
+                  - data
+              examples:
+                Success:
+                  value:
+                    data:
+                      questions:
+                        - deliveredAt: "2023-04-25T12:25:14+00:00"
+                          id: 9c08c6b5-5a8e-4fb8-a8b0-2f84c558235a
+                          name: "First, however, she went on, 'if you don't know what to."
+                        - deliveredAt: "2023-03-31T02:49:09+00:00"
+                          id: e33a74a8-dc77-437c-b76c-1125dc34d036
+                          name: King sharply. 'Do you know about this business?' the King.
+                        - deliveredAt: "2023-03-27T23:25:20+00:00"
+                          id: bc50e32d-b100-4f2a-b4c6-fa9e6313fa25
+                          name: "I'll write one--but I'm grown up now,' she said, as."
+  /api/v1/question/delivery-status:
+    post:
+      tags:
+        - api
+        - v1
+        - question
+        - delivery-status
+      summary: Question - Delivery Status
+      description: Get delivery status of question
+      operationId: ApiV1QuestionDeliveryStatus
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      deliveryDateCount:
+                        type: integer
+                        example: 0
+                      deliveryTimer:
+                        type: string
+                        example: <string>
+                      deliveryWeekdays:
+                        type: array
+                        example:
+                          - <string>
+                          - <string>
+                        items:
+                          type: string
+                          example: <string>
+                      nextDeliveryDate:
+                        type: string
+                        example: <string>
+                        nullable: true
+                      timezone:
+                        type: string
+                        example: <string>
+                      undeliveredQuestionCount:
+                        type: integer
+                        example: 0
+                required:
+                  - data
+              examples:
+                Success:
+                  value:
+                    data:
+                      deliveryDateCount: 1
+                      deliveryTimer: "09:02"
+                      deliveryWeekdays:
+                        - Tue
+                        - Wed
+                      nextDeliveryDate: "2023-04-29"
+                      timezone: Asia/Tokyo
+                      undeliveredQuestionCount: 11
+  /api/v1/question/import:
+    post:
+      tags:
+        - api
+        - v1
+        - question
+        - import
+      summary: Question - Import
+      description: Import question from csv
+      operationId: ApiV1QuestionImport
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                questionPlacement:
+                  type: string
+                  x-stoplight:
+                    id: 2jdsmjmkz2viq
+                questions:
+                  type: array
+                  x-stoplight:
+                    id: f5jysetayjz55
+                  items:
+                    x-stoplight:
+                      id: 2qatfjvqxc7sf
+                    type: object
+                    properties:
+                      question:
+                        type: object
+                        x-stoplight:
+                          id: ic0swudw69o52
+                        properties:
+                          questionDescription:
+                            type: string
+                            x-stoplight:
+                              id: 5a6sqytqmj5i2
+                          questionName:
+                            type: string
+                            x-stoplight:
+                              id: a8rdeep3oox7v
+                          questionOptions:
+                            x-stoplight:
+                              id: gf9qaqc9682id
+                            type: array
+                            items:
+                              $ref: "#/components/schemas/QuestionOptionSaveRequestDto"
+                      questionPlacement:
+                        type: string
+                        x-stoplight:
+                          id: 1vv771bam4ifc
+            example:
+              data:
+                questionPlacement: <string>
+                questions:
+                  - question:
+                      questionDescription: <string>
+                      questionName: <string>
+                      questionOptions:
+                        - id: <string>
+                          isCorrect: <boolean>
+                          name: <string>
+                          position: <integer>
+                        - id: <string>
+                          isCorrect: <boolean>
+                          name: <string>
+                          position: <integer>
+                    questionPlacement: <string>
+                  - question:
+                      questionDescription: <string>
+                      questionName: <string>
+                      questionOptions:
+                        - id: <string>
+                          isCorrect: <boolean>
+                          name: <string>
+                          position: <integer>
+                        - id: <string>
+                          isCorrect: <boolean>
+                          name: <string>
+                          position: <integer>
+                    questionPlacement: <string>
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/EmptyResponseDto"
+                  - $ref: "#/components/schemas/ErrorResponseDto"
+              examples: {}
+  /api/v1/question/stats:
+    post:
+      tags:
+        - api
+        - v1
+        - question
+        - stats
+      summary: Question - Stats
+      description: Get question stats
+      operationId: ApiV1QuestionStats
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                questionId:
+                  type: string
+                  example: <string>
+            examples:
+              Example 1:
+                value:
+                  questionId: 9c08c6b5-5a8e-4fb8-a8b0-2f84c558235a
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      correctAnswerCount:
+                        type: integer
+                        example: 0
+                      deliveredCount:
+                        type: integer
+                        example: 0
+                      totalAnswerCount:
+                        type: integer
+                        example: 0
+                required:
+                  - data
+              examples:
+                Success:
+                  value:
+                    data:
+                      correctAnswerCount: 1
+                      deliveredCount: 2
+                      totalAnswerCount: 1
+  /api/v1/question/undelivered-detail:
+    post:
+      tags:
+        - api
+        - v1
+        - question
+        - undelivered-detail
+      summary: Question - Undelivered Detail
+      description: Get detail of undelivered question
+      operationId: ApiV1QuestionUndeliveredDetail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                questionId:
+                  type: string
+                  example: <string>
+            examples:
+              Example 1:
+                value:
+                  questionId: b8edd9e9-06cd-4d4d-82bd-cdc4e40ccb28
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          description:
+                            type: string
+                            example: <string>
+                          id:
+                            type: string
+                            example: <string>
+                          name:
+                            type: string
+                            example: <string>
+                          questionOptions:
+                            type: array
+                            example:
+                              - id: <string>
+                                isCorrect: true
+                                name: <string>
+                                position: 0
+                              - id: <string>
+                                isCorrect: true
+                                name: <string>
+                                position: 0
+                            items:
+                              $ref: "#/components/schemas/QuestionOptionResponseDto"
+                    required:
+                      - data
+                  - $ref: "#/components/schemas/ErrorResponseDto"
+              examples:
+                Success:
+                  value:
+                    data:
+                      description: test
+                      id: b8edd9e9-06cd-4d4d-82bd-cdc4e40ccb28
+                      name: test
+                      questionOptions:
+                        - id: 38d1466f-eb24-4edf-b88c-730539323425
+                          isCorrect: false
+                          name: test
+                          position: 0
+                        - id: 5a91ba10-eef2-44e9-9cc6-f0aba2867102
+                          isCorrect: true
+                          name: test
+                          position: 1
+                Error - Mismatched organization id:
+                  value:
+                    error: EJSHNYLWN
+                    data: []
+  /api/v1/question/undelivered-list:
+    post:
+      tags:
+        - api
+        - v1
+        - question
+        - undelivered-list
+      summary: Question - Undelivered List
+      description: Get list of undelivered question
+      operationId: ApiV1QuestionUndeliveredList
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      questions:
+                        type: array
+                        example:
+                          - deliveredAt: <string>
+                            id: <string>
+                            name: <string>
+                          - deliveredAt: <string>
+                            id: <string>
+                            name: <string>
+                        items:
+                          $ref: "#/components/schemas/QuestionOutlineResponseDto"
+                required:
+                  - data
+              examples:
+                Success:
+                  value:
+                    data:
+                      questions:
+                        - deliveredAt: null
+                          id: b8edd9e9-06cd-4d4d-82bd-cdc4e40ccb28
+                          name: test
+                        - deliveredAt: null
+                          id: 652204ab-c258-4a58-9f17-314342a4587f
+                          name: Queen. 'I haven't the least idea what Latitude or.
+                        - deliveredAt: null
+                          id: 4a34d825-0d14-4c87-9b68-9748b0f6acd2
+                          name: "These were the cook, to see the Hatter instead!' CHAPTER."
+                        - deliveredAt: null
+                          id: 37eeae53-afb4-4795-b351-f441effe
+                          name: "However, she got up, and began singing in its hurry to get."
+                        - deliveredAt: null
+                          id: 1e26da36-f8e8-4dd5-84aa-0a6d97586813
+                          name: 'Alice! Come here directly, and get ready for your walk!".'
+tags:
+  - name: api
+  - name: v1
+  - name: question
+  - name: view-detail
+  - name: update
+  - name: undelivered-list
+  - name: undelivered-detail
+  - name: unanswered-list
+  - name: stats
+  - name: import
+  - name: delivery-status
+  - name: delivered-list
+  - name: delivered-detail
+  - name: delete
+  - name: create
+  - name: answered-list
+  - name: organization-settings
+  - name: update1
+  - name: detail
+  - name: me
+  - name: detail1
+  - name: delivery
+  - name: list-dates
+  - name: list
+  - name: delivery-weekday
+  - name: update12
+  - name: list1
+  - name: delivery-date
+  - name: update123
+  - name: auth
+  - name: logout
+  - name: csrf-token
+  - name: answer
+  - name: ratio
+  - name: create1
+  - name: health
+  - name: check
+components:
+  schemas:
+    QuestionOutlineResponseDto:
+      title: QuestionOutlineResponseDto
+      x-stoplight:
+        id: 1om2a6yn1u6bj
+      type: object
+      properties:
+        id:
+          type: string
+        deliveredAt:
+          type: string
+          x-stoplight:
+            id: 8f82ex176ims6
+          nullable: true
+        name:
+          type: string
+          x-stoplight:
+            id: 21l3nwb7mxpve
+    DeliveryDateResponseDto:
+      title: DeliveryDateResponseDto
+      x-stoplight:
+        id: mj8ug65no7ffz
+      type: object
+      properties:
+        deliveryDate:
+          type: string
+          x-stoplight:
+            id: 3m2m1320rnllz
+        deliveryDateId:
+          type: string
+          x-stoplight:
+            id: pzg35ynm10kio
+          nullable: true
+        isDelivery:
+          type: boolean
+          x-stoplight:
+            id: r21dbk6ofh1bz
+        questionId:
+          type: string
+          x-stoplight:
+            id: x5mugqxl3zxrs
+      x-examples:
+        Example 1:
+          deliveryDate: "2023-05-03"
+          deliveryDateId: null
+          isDelivery: true
+          questionId: null
+    QuestionOptionSaveRequestDto:
+      title: QuestionOptionSaveRequestDto
+      x-stoplight:
+        id: in45kbqd9m0b1
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        isCorrect:
+          type: boolean
+          x-stoplight:
+            id: 0kfqrhfxjn3y8
+        name:
+          type: string
+          x-stoplight:
+            id: ih1es806p98j2
+        position:
+          type: integer
+          x-stoplight:
+            id: dv0i2a7k81p8w
+      x-examples:
+        Example 1:
+          id: null
+          isCorrect: true
+          name: test
+          position: 0
+    QuestionOptionResponseDto:
+      title: QuestionOptionResponseDto
+      x-stoplight:
+        id: ujr45lerl3c3d
+      type: object
+      properties:
+        id:
+          type: string
+        isCorrect:
+          type: boolean
+          x-stoplight:
+            id: vd960ced6q3o2
+        name:
+          type: string
+          x-stoplight:
+            id: zvgedokuoa825
+        position:
+          type: integer
+          x-stoplight:
+            id: asrdcq59918of
+      x-examples: {}
+    EmptyResponseDto:
+      title: EmptyResponseDto
+      x-stoplight:
+        id: thjyk2cmz59qr
+      type: object
+      properties:
+        data:
+          type: array
+          x-stoplight:
+            id: 74yguxgu153zm
+          minItems: 0
+          maxItems: 0
+          items: {}
+      required:
+        - data
+    ErrorResponseDto:
+      title: ErrorResponseDto
+      x-stoplight:
+        id: qlwd13xdjqtd4
+      type: object
+      properties:
+        error:
+          type: string
+          x-stoplight:
+            id: 57n8q5r3tkoux
+      required:
+        - error
